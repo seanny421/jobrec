@@ -50,6 +50,23 @@
   text-align: center;
 }
 
+.input {
+  background-color: white;
+  border-radius: 100px; 
+  border: none;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: black;
+}
+
+.input:focus{
+  outline: none;
+  caret-color:transparent;
+  border-bottom: 2px solid;
+  border-color: rgba(243, 5, 128, 0.5);
+}
+
 .description {
   margin: 4rem 0;
   line-height: 1.5;
