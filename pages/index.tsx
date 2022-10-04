@@ -40,7 +40,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>JobRec.</h1>
         <p className={styles.description}>
           {/*Get started with your future <CustomButton onClick={() => setLight((prev) => !prev)} variant='contained'><ChevronRightIcon/></CustomButton>*/}
-          Get started with your future <CustomButton variant='contained'><ChevronRightIcon/></CustomButton>
+          <span style={{marginRight: '0.5rem'}}>Get started with your future </span><CustomButton href="/pick" variant='contained'><ChevronRightIcon/></CustomButton>
         </p>
       </main>
 

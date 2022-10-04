@@ -29,6 +29,10 @@ export const darkTheme = createTheme({
   },
 })
 
+darkTheme.shadows.push(
+  "0px 13px 17px -9px rgba(f,f,f,0.4),0px 26px 40px 4px rgba(0,0,0,0.2),0px 10px 48px 9px rgba(0,0,0,0.13)"
+);
+
 export const lightTheme = createTheme({
   palette: {
     background: {
