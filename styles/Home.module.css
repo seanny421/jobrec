@@ -10,6 +10,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+}
+
+.settingsmenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  
 }
 
 .footer {

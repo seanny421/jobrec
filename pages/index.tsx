@@ -2,51 +2,28 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useEffect } from 'react'
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import {createTheme, ThemeProvider, styled} from '@mui/material/styles'
-import { Button, TextField } from '@mui/material'
-import { orange } from '@mui/material/colors';
+import { Button, ThemeProvider, styled, CssBaseline } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-
-declare module '@mui/material/styles' {
-  interface Theme {
-    status: {
-      danger: string;
-    };
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    status?: {
-      danger?: string;
-    }
-  }
-}
-
-const theme = createTheme({
-  status: {
-    danger: orange[500],
-  },
-})
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsMenu from '../components/SettingsMenu';
+import { darkTheme, lightTheme } from '../theming/theme';
+import {useState} from 'react';
+import {useSettingsState, useThemeState} from '../state/Global';
 
 const Home: NextPage = () => {
-
-  function callBackend(){
-    fetch("/api/hello")
-      .then((res) => res.json())
-      .then((data) => console.log(data.name));
-  }
-
-  useEffect(() => {
-    callBackend();
-  }, []);
+  //state and fields
+  const [light, setLight] = useState(false); //between light and dark
+  const isLight = useThemeState((state) => state.isLight);
+  const toggleSettings = useSettingsState((state) => state.toggle);
+  const settingsShown = useSettingsState((state) => state.shown);
 
   return (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={isLight ? lightTheme : darkTheme }>
+    <CssBaseline/>
     <div className={styles.container}>
       <Head>
         <title>JobRec</title>
@@ -55,34 +32,28 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <section id='settingsmenu' className={styles.settingsmenu}>
+          <SettingsIcon onClick={toggleSettings} style={{cursor: 'pointer', margin: '10px', opacity: settingsShown ? 1.0 : 0.3}}/>
+          <SettingsMenu/>
+        </section>
+
         <h1 className={styles.title}>JobRec.</h1>
         <p className={styles.description}>
-          Get started with your future <Button variant='contained'><ChevronRightIcon/></Button>
+          {/*Get started with your future <CustomButton onClick={() => setLight((prev) => !prev)} variant='contained'><ChevronRightIcon/></CustomButton>*/}
+          Get started with your future <CustomButton variant='contained'><ChevronRightIcon/></CustomButton>
         </p>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   </ThemeProvider>
   )
 }
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
-  backgroundColor: '#fff',
-  borderRadius: 100,
-  border: 'none',
+
+const CustomButton = styled(Button)(({theme}) => ({
+  backgroundColor: theme.palette.primary.main,
 }));
+
 
 
 export default Home
