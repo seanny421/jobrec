@@ -1,8 +1,8 @@
-import type { NextPage } from "next"
-import { useSettingsState, useThemeState } from '../state/Global';
 import { Box, Switch, Modal, FormControlLabel } from '@mui/material/';
 import { darkTheme, lightTheme } from "../theming/theme";
-import {dark} from "@mui/material/styles/createPalette";
+import SettingsIcon from '@mui/icons-material/Settings';
+import styles from '../styles/SettingsMenu.module.css'
+import useStore  from '../state/Global';
 
 const style = (isLight: boolean) => ({
   position: 'absolute' as 'absolute',
@@ -18,18 +18,18 @@ const style = (isLight: boolean) => ({
 });
 
 const SettingsMenu: React.FunctionComponent = () => {
-  const shown = useSettingsState((state) => state.shown);
-  const toggle = useSettingsState((state) => state.toggle);
-  const isLight = useThemeState((state) => state.isLight);
-  const toggleTheme = useThemeState((state) => state.toggle);
-  const handleClose = () => toggle();
+  const store = useStore(); //global state
+  const handleClose = () => store.toggleSettings();
 
   return(
-    <Modal onClose={handleClose} open={shown}>
-      <Box sx={style(isLight)}>
-        <FormControlLabel style={{marginLeft:'auto', marginRight:'auto'}} label='Dark mode' control={<Switch defaultChecked={!isLight} onChange={toggleTheme}/>}/>
-      </Box>
-    </Modal>
+    <section id='settingsmenu' className={styles.settingsmenu}>
+      <SettingsIcon onClick={store.toggleSettings} style={{cursor: 'pointer', margin: '10px', opacity: store.shown ? 1.0 : 0.3}}/>
+      <Modal onClose={handleClose} open={store.shown}>
+        <Box sx={style(store.isLight)}>
+          <FormControlLabel style={{marginLeft:'auto', marginRight:'auto'}} label='Dark mode' control={<Switch checked={!store.isLight} onChange={store.toggleTheme}/>}/>
+        </Box>
+      </Modal>
+    </section>
   )
 }
 
