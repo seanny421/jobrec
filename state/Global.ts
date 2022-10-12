@@ -6,7 +6,11 @@ type Store = {
   shown: boolean;
   toggleTheme: () => void;
   toggleSettings: () => void;
+
+  selectedSubjectIDs: number[];
+  setSelectedSubjectIDs: (input: number[]) => void;
 }
+
 
 const useStore = create<Store>()(
   devtools(
@@ -15,24 +19,11 @@ const useStore = create<Store>()(
       shown: false,
       toggleTheme: () => set((state) => ({isLight: !state.isLight})),
       toggleSettings: () => set((state) => ({shown: !state.shown})),
+
+      selectedSubjectIDs: [],
+      setSelectedSubjectIDs: (input) => set(() => ({selectedSubjectIDs: input})),
     }), {name: 'boolean-storage'})
   )
 )
 
 export default useStore;
-
-// interface BearState {
-//   bears: number
-//   increase: (by: number) => void
-// }
-
-//for learning
-// const useBearStore = create<BearState>()(
-//   devtools(
-//     persist((set) => ({
-//       bears: 0,
-//       increase: (by) => set((state) => ({ bears: state.bears + by })),
-//     }), {name: 'bear-storage'})
-//   )
-// )
-
