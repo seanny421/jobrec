@@ -1,28 +1,45 @@
 import type { NextPage } from 'next'
-import Head from 'next/head';
+import Head from 'next/head'
 import {Box, ThemeProvider, CssBaseline, styled, Button} from '@mui/material'
-import { useEffect, useState } from 'react';
-import { darkTheme, lightTheme } from '../theming/theme';
-import SettingsMenu from '../components/SettingsMenu';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SubjectPill from '../components/SubjectPill';
-import useStore from '../state/Global';
-import styles from '../styles/Home.module.css';
-import pickStyles from '../styles/Pick.module.css';
+import { useEffect, useState } from 'react'
+import { darkTheme, lightTheme } from '../theming/theme'
+import SettingsMenu from '../components/SettingsMenu'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import SubjectPill from '../components/SubjectPill'
+import useStore from '../state/Global'
+import styles from '../styles/Home.module.css'
+import pickStyles from '../styles/Pick.module.css'
+//backend
+import { createClient} from '@supabase/supabase-js'
+import type {definitions} from '../backend/generated-types'
+
 
 const Pick: NextPage = () => {
   const store = useStore(); 
   const [isLight, setIsLight] = useState(false);
+  const [subjectList, setSubjectList] = useState<definitions["Subject"][]>([]);
+  //backend
+  const supabase = createClient(String(process.env.NEXT_PUBLIC_SUPABASE_URL), String(process.env.NEXT_PUBLIC_ANON));
 
-  //FOR FRONTEND TESTING, WILL GET THIS FROM SOME API/DATABASE
-  let subjects: string[] = ['Maths', 'English', 'Drama', 
-                              'History', 'Physics', 'Computing Science',
-                              'Chemistry', 'Biology', 'Modern Studies', 
-                              'Geography', 'Languages (Spanish, French etc)'].concat(Array(60).fill("Psychology"));
-
+  //run on store.isLight update
   useEffect(() => {
     setIsLight(store.isLight);
   }, [store.isLight]);
+
+  //run once on component load
+  useEffect(() => {
+    getSubjectList()
+  }, []);
+
+  useEffect(() => {
+    console.log(subjectList);
+  }, [subjectList])
+
+  async function getSubjectList(){
+     const y = await supabase.from('Subject').select('*')
+     if(y.data) //if y is not null
+       setSubjectList(y.data);
+  }
 
   return(
     <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
@@ -44,10 +61,10 @@ const Pick: NextPage = () => {
 
           {/* subject list */}
             <div className={pickStyles.subjectlist_container}>
-            {subjects.map(function(subject, i){
+            {subjectList.map(function(subject, i){
               return(
                 <Box key={i} sx={{margin: 0.5}}>
-                  <SubjectPill subject={subject} isLight={isLight}/>
+                  <SubjectPill subject={subject.name} isLight={isLight}/>
                 </Box>
               );
             })}

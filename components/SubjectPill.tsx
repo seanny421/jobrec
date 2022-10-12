@@ -34,11 +34,3 @@ const style = (isLight: boolean, clicked: boolean) => ({
 });
 
 export default SubjectPill;
-
-// const SubjectPill: React.FunctionComponent = ({subject}: Props) => {
-//   return(
-//     <div>
-//       {subject}
-//     </div>
-//   )
-// }
